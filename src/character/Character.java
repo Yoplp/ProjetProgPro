@@ -1,4 +1,4 @@
-package character.state;
+package character;
 
 public class Character {
 }

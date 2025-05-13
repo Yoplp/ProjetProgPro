@@ -1,4 +1,4 @@
-package world;
+package map;
 
 public class Room {
 }
