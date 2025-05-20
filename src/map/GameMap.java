@@ -79,7 +79,7 @@ public class GameMap {
         this.StartRoom = Start;
     }
 
-    public Room gerStart() {
+    public Room getStart() {
         return StartRoom;
     }
 

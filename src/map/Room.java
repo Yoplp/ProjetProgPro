@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import character.Character;
+import item.Item;
 
 public class Room {
     private String name;
