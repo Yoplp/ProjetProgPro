@@ -28,8 +28,7 @@ public class Player extends Character {
     }
 
     public boolean move(Direction direction) {
-        // TODO: set next room
-        Room nextRoom = new Room();
+        Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom != null) {
             currentRoom = nextRoom;
             System.out.println("Vous vous déplacez vers " + direction);
