@@ -10,7 +10,7 @@ import item.Item;
 
 public class Room {
     private String name;
-    private Map<String, Room> exit;
+    private Map<Direction, Room> exit;
     private List<Item> item;
     private List<Character> character;
 
@@ -20,36 +20,39 @@ public class Room {
         this.item = new ArrayList<>();
         this.character = new ArrayList<>();
     }
-    public void addExit(String direction, Room NearRoom) {
-        exit.put(direction.toLowerCase(), NearRoom);
+    public void addExit(Direction direction, Room NearRoom) {
+        exit.put(direction, NearRoom);
     }
 
-    public Room getSortie(String direction) {
-        return exit.get(direction.toLowerCase());
+    public Room getExit(Direction direction) {
+        return exit.get(direction);
+    }
+
+    public void addCharacter(Character character) {
+    	this.character.add(character);
+    }
+
+    public void removeCharacter(Character character) {
+        this.character.remove(character);
+    }
+
+    public List<Character> getCharacter() {
+        return character;
     }
 
     public void addItem(Item item) {
         this.item.add(item);
     }
 
-    public void addCharacter(Character character) {
-    	this.character.add(character);
+    public void removeItem(Item item) {
+        this.item.remove(item);
     }
-    
-	public String getName() {
-		return name;}
-	public void setName(String name) {
-		this.name = name;}
-	public Map<String, Room> getExit() {
-		return exit;}
-	public void setExit(Map<String, Room> exit) {
-		this.exit = exit;}
-	public List<Item> getItem() {
-		return item;}
-	public void setItem(List<Item> item) {
-		this.item = item;}
-	public List<Character> getCharacter() {
-		return character;}
-	public void setCharacter(List<Character> character) {
-		this.character = character;}
+
+    public List<Item> getItem() {
+        return item;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
