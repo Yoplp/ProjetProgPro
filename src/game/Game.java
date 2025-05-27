@@ -27,8 +27,8 @@ public class Game {
         personnages.add(new Monster("Fantôme", 7, 5));
         personnages.add(new Monster("Boss final", 3, 20));
 
-        personnages.add(new Npc("Marchand", "Tu veux acheter quelque chose ?"));
-        personnages.add(new Npc("Vieil homme", "Il y a un secret derrière la porte..."));
+        personnages.add(new Npc("Marchand", 10,10, "Tu veux acheter quelque chose ?"));
+        personnages.add(new Npc("Vieil homme", 10,10, "Il y a un secret derrière la porte..."));
 
         return personnages;
     }
@@ -83,7 +83,7 @@ public class Game {
                 switch (input) {
                     case "prendre":
                         for (Item item : new ArrayList<>(salleActuelle.getItem())) {
-                            Inventory.addItem(item);
+                            salleActuelle.addItem(item);
                             salleActuelle.removeItem(item);
                             System.out.println("Objet ajouté à l'inventaire : " + item.getName());
                         }
