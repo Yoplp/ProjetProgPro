@@ -34,4 +34,13 @@ public class Character {
     public void setHealth(int health) {
         this.health = health;
     }
+    
+    public void takeDamage(int amount) {
+        this.health -= amount;
+        if (this.health < 0) {
+            this.health = 0;
+        }
+        System.out.println(name + " a subi " + amount + " dégâts. PV restants : " + health);
+    }
+
 }
