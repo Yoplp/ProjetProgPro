@@ -113,8 +113,6 @@ public class Game {
             System.out.println("La salle est vide.");
             proposerSorties(scanner, salleActuelle, gameState);
         }
-
-        System.out.println("C'est Gagné, C'est Gagné, Ouaiiiiis !!!!!!");
     }
 
     private void proposerSorties(Scanner scanner, Room salle, GameState etat) {
@@ -132,6 +130,14 @@ public class Game {
             Direction dirChoisie = Direction.valueOf(direction);
             Room prochaineSalle = salle.getExit(dirChoisie);
             if (prochaineSalle != null) {
+            	if (prochaineSalle.getName().equalsIgnoreCase("Door")) {
+                    if (gameState.getPlayer().getInventory().getItem("Clé") == null) {
+                        System.out.println("La porte est verrouillée. Vous avez besoin d'une clé pour entrer.");
+                        return;
+                    } else {
+                        System.out.println("Vous utilisez la clé pour ouvrir la porte.");
+                    }
+                }
                 gameState.getPlayer().setCurrentRoom(prochaineSalle);
             } else {
                 System.out.println("Pas de sortie dans cette direction.");

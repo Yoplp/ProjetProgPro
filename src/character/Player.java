@@ -5,7 +5,7 @@ import map.Direction;
 import map.Room;
 
 public class Player extends Character {
-    public static final int PLAYER_MAX_HEALTH = 100;
+    public static final int PLAYER_MAX_HEALTH = 10;
     private Room currentRoom;
     private Inventory inventory;
 

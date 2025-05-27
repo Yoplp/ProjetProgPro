@@ -24,18 +24,17 @@ public class GameMap {
         bar.addCharacter(new Npc("Vieil homme", 10,10, "Il y a un secret derrière la porte..."));
 
         Room goblin = new Room("Goblin");
-        goblin.addCharacter(new Monster("Goblin", 3, 15));
+        goblin.addCharacter(new Monster("Goblin", 3, 15, false,true));
         Room chestGoblin = new Room("Chambre du Goblin");
 
         Room ghost = new Room("Fantômes");
-        ghost.addCharacter(new Monster("Fantômes", 7, 5));
+        ghost.addCharacter(new Monster("Fantômes", 7, 5, true,false));
         Room chestGhost = new Room("Tombe du Fantômes");
 
         Room pc = new Room("PC Bang");
         pc.addCharacter(new Npc("Prince Nigérien", 10, 10, "Salut à toi, jeune entrepreneur !"));
 
         Room door = new Room("Door");
-        door.addCharacter(new Monster("Door", 0, 1000));
 
         Room boss = new Room("Boss");
         boss.addCharacter(new Monster("Boss final", 3, 20));

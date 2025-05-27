@@ -4,10 +4,14 @@ import character.Monster;
 
 public class AttackMagique implements AttackStrategy {
     @Override
-    public void attack(Monster cible) {
-        System.out.println("Vous lancez un sort magique !");
-        cible.takeDamage(5);
-        System.out.println("Le "+ cible.getName()+"a pris 5 dégats");
+    public void attack( Monster monster) {
+        if (monster.isWeakToMagic()) {
+            int damage = 5;
+            System.out.println(monster.getName() + " est faible à la magie !");
+            monster.takeDamage(damage);
+        } else {
+            System.out.println("La magie n'affecte pas " + monster.getName() + " !");
+        }
     }
 }
 
