@@ -16,7 +16,7 @@ public class GameState {
     }
 
     public static GameState getInstance() {
-            if (instance == null) {
+        if (instance == null) {
             instance = new GameState();
         }
         return instance;
