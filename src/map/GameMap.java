@@ -1,5 +1,8 @@
 package map;
 
+import character.Monster;
+import character.Npc;
+
 import java.util.*;
 
 public class GameMap {
@@ -13,15 +16,30 @@ public class GameMap {
 
     private void initMap() {
         Room start = new Room("Start");
+
+        Room merchant = new Room("Marchand");
+        merchant.addCharacter(new Npc("Marchand", 10,10, "Tu veux acheter quelque chose ?"));
+
         Room bar = new Room("Bar");
-        Room merchant = new Room("Merchant");
-        Room door = new Room("Door");
-        Room boss = new Room("Boss");
-        Room ghost = new Room("Ghost");
-        Room chestGhost = new Room("Ghost Chest");
-        Room pc = new Room("PC");
+        bar.addCharacter(new Npc("Vieil homme", 10,10, "Il y a un secret derrière la porte..."));
+
         Room goblin = new Room("Goblin");
-        Room chestGoblin = new Room("Goblin Chest");
+        goblin.addCharacter(new Monster("Goblin", 3, 15));
+        Room chestGoblin = new Room("Chambre du Goblin");
+
+        Room ghost = new Room("Fantômes");
+        ghost.addCharacter(new Monster("Fantômes", 7, 5));
+        Room chestGhost = new Room("Tombe du Fantômes");
+
+        Room pc = new Room("PC Bang");
+        pc.addCharacter(new Npc("Prince Nigérien", 10, 10, "Salut à toi, jeune entrepreneur !"));
+
+        Room door = new Room("Door");
+        door.addCharacter(new Monster("Door", 0, 1000));
+
+        Room boss = new Room("Boss");
+        boss.addCharacter(new Monster("Boss final", 3, 20));
+
         Room hallway1 = new Room("Hallway 1");
         Room hallway2 = new Room("Hallway 2");
         Room hallway3 = new Room("Hallway 3");

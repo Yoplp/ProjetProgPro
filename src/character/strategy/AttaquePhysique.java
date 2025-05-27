@@ -1,5 +1,7 @@
-package character;
+package character.strategy;
 
+
+import character.Monster;
 
 public class AttaquePhysique implements AttackStrategy {
     @Override

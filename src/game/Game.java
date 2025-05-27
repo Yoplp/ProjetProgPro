@@ -3,6 +3,10 @@ package game;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import character.strategy.AttackStrategy;
+import character.strategy.AttaqueMagique;
+import character.strategy.AttaquePhysique;
 import map.Room;
 import map.Direction;
 import character.*;
@@ -13,7 +17,6 @@ import item.Item;
 public class Game {
     private GameState gameState;
     private Scanner scanner;
-    private Player player;
 
     public Game() {
         this.gameState = GameState.getInstance();
@@ -38,7 +41,7 @@ public class Game {
 
         boolean enCours = true;
         while (enCours) {
-            Room salleActuelle = player.getCurrentRoom();
+            Room salleActuelle = gameState.getPlayer().getCurrentRoom();
             System.out.println("\nVous êtes dans : " + salleActuelle.getName());
 
             boolean actionFaite = false;
@@ -83,7 +86,7 @@ public class Game {
                 switch (input) {
                     case "prendre":
                         for (Item item : new ArrayList<>(salleActuelle.getItem())) {
-                            salleActuelle.addItem(item);
+                            gameState.getPlayer().getInventory().addItem(item);
                             salleActuelle.removeItem(item);
                             System.out.println("Objet ajouté à l'inventaire : " + item.getName());
                         }
@@ -145,7 +148,7 @@ public class Game {
             Direction dirChoisie = Direction.valueOf(direction);
             Room prochaineSalle = salle.getExit(dirChoisie);
             if (prochaineSalle != null) {
-                player.setCurrentRoom(prochaineSalle);
+                gameState.getPlayer().setCurrentRoom(prochaineSalle);
             } else {
                 System.out.println("Pas de sortie dans cette direction.");
             }

@@ -1,4 +1,6 @@
-package character;
+package character.strategy;
+
+import character.Monster;
 
 public class AttaqueMagique implements AttackStrategy {
     @Override
