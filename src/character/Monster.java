@@ -1,8 +1,8 @@
 package character;
 
-public class Monstre extends Character {
+public class Monster extends Character {
 
-    public Monstre(String name,  int attack, int health) {
+    public Monster(String name,  int attack, int health) {
         super(name, health, attack);
     }
 
