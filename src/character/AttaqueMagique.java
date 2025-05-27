@@ -1,0 +1,11 @@
+package character;
+
+public class AttaqueMagique implements AttackStrategy {
+    @Override
+    public void attaquer(Monster cible) {
+        System.out.println("Vous lancez un sort magique !");
+        cible.takeDamage(5);
+        System.out.println("Le "+ cible.getName()+"a pris 5 dégats");
+    }
+}
+

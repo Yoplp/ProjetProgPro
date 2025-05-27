@@ -23,7 +23,7 @@ public class Game {
     public static List<Character> creerPersonnages() {
         List<Character> personnages = new ArrayList<>();
 
-        personnages.add(new Monster("Golem", 3, 15));
+        personnages.add(new Monster("Gobelin", 3, 15));
         personnages.add(new Monster("Fantôme", 7, 5));
         personnages.add(new Monster("Boss final", 3, 20));
 
@@ -34,7 +34,7 @@ public class Game {
     }
 
     public void demarrer() {
-        System.out.println("Bienvenue dans le jeu d'aventure !");
+        System.out.println("Bienvenue dans ce jeu textuel !");
 
         boolean enCours = true;
         while (enCours) {
@@ -52,7 +52,7 @@ public class Game {
 
                     switch (input) {
                         case "attaquer":
-                            //attaquer
+                            attaquer(monstre);
                             break;
                         case "utiliser objet":
                             //iventaire
@@ -133,13 +133,14 @@ public class Game {
     private void proposerSorties(Scanner scanner, Room salle, GameState etat) {
         System.out.println("Sorties disponibles :");
         for (Direction dir : Direction.values()) {
-            Room sortie = salle.getExit(dir);
-            if (sortie != null) {
+            if (salle.getExit(dir) != null) {
                 System.out.println("- " + dir.name().toUpperCase());
             }
         }
+
         System.out.print("Choisissez une direction : ");
         String direction = scanner.nextLine().toUpperCase().trim();
+
         try {
             Direction dirChoisie = Direction.valueOf(direction);
             Room prochaineSalle = salle.getExit(dirChoisie);
@@ -152,4 +153,26 @@ public class Game {
             System.out.println("Direction invalide.");
         }
     }
+    
+    public void attaquer(Monster cible) {
+        AttackStrategy strategie;
+
+        if (Inventory.getItem("Baguette magique") != null) {
+            strategie = new AttaqueMagique();
+        } else if (Inventory.getItem("Épée") != null) {
+            strategie = new AttaquePhysique();
+        } else {
+            System.out.println("Vous n'avez pas d'arme pour attaquer !");
+            return;
+        }
+
+        strategie.attaquer(cible);
+
+        if (cible.getHealth() <= 0) {
+            System.out.println(cible.getName() + " est vaincu !");
+            Room salleActuelle = player.getCurrentRoom();
+            salleActuelle.removeCharacter(cible);
+        }
+    }
+
 }
