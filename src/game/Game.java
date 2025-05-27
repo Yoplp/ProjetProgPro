@@ -1,17 +1,15 @@
 package game;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import character.strategy.AttackStrategy;
-import character.strategy.AttaqueMagique;
-import character.strategy.AttaquePhysique;
+import character.strategy.AttackMagique;
+import character.strategy.AttackPhysique;
 import map.Room;
 import map.Direction;
 import character.*;
 import character.Character;
-import item.Inventory;
 import item.Item;
 
 public class Game {
@@ -23,24 +21,10 @@ public class Game {
         this.scanner = new Scanner(System.in);
     }
 
-    public static List<Character> creerPersonnages() {
-        List<Character> personnages = new ArrayList<>();
-
-        personnages.add(new Monster("Gobelin", 3, 15));
-        personnages.add(new Monster("Fantôme", 7, 5));
-        personnages.add(new Monster("Boss final", 3, 20));
-
-        personnages.add(new Npc("Marchand", 10,10, "Tu veux acheter quelque chose ?"));
-        personnages.add(new Npc("Vieil homme", 10,10, "Il y a un secret derrière la porte..."));
-
-        return personnages;
-    }
-
-    public void demarrer() {
+    public void start() {
         System.out.println("Bienvenue dans ce jeu textuel !");
 
-        boolean enCours = true;
-        while (enCours) {
+        while (gameState.isRunning()) {
             Room salleActuelle = gameState.getPlayer().getCurrentRoom();
             System.out.println("\nVous êtes dans : " + salleActuelle.getName());
 
@@ -160,20 +144,20 @@ public class Game {
     public void attaquer(Monster cible) {
         AttackStrategy strategie;
 
-        if (Inventory.getItem("Baguette magique") != null) {
-            strategie = new AttaqueMagique();
-        } else if (Inventory.getItem("Épée") != null) {
-            strategie = new AttaquePhysique();
+        if (gameState.getPlayer().getInventory().getItem("Baguette magique") != null) {
+            strategie = new AttackMagique();
+        } else if (gameState.getPlayer().getInventory().getItem("Épée") != null) {
+            strategie = new AttackPhysique();
         } else {
             System.out.println("Vous n'avez pas d'arme pour attaquer !");
             return;
         }
 
-        strategie.attaquer(cible);
+        strategie.attack(cible);
 
         if (cible.getHealth() <= 0) {
             System.out.println(cible.getName() + " est vaincu !");
-            Room salleActuelle = player.getCurrentRoom();
+            Room salleActuelle = gameState.getPlayer().getCurrentRoom();
             salleActuelle.removeCharacter(cible);
         }
     }

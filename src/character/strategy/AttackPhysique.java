@@ -1,11 +1,12 @@
 package character.strategy;
 
+
 import character.Monster;
 
-public class AttaqueMagique implements AttackStrategy {
+public class AttackPhysique implements AttackStrategy {
     @Override
-    public void attaquer(Monster cible) {
-        System.out.println("Vous lancez un sort magique !");
+    public void attack(Monster cible) {
+        System.out.println("Vous attaquez physiquement !");
         cible.takeDamage(5);
         System.out.println("Le "+ cible.getName()+"a pris 5 dégats");
     }
