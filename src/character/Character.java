@@ -1,14 +1,19 @@
 package character;
 
+import character.strategy.AttackStrategy;
+
 public class Character {
     protected String name;
     protected int attack;
     protected int health;
+    protected AttackStrategy attackStrategy;
+    protected Type type;
 
-    public Character(String name, int attack, int health) {
+    public Character(String name, int attack, int health, Type type) {
         this.name = name;
         this.attack = attack;
         this.health = health;
+        this.type = type;
     }
 
     public String getName() {
@@ -23,6 +28,10 @@ public class Character {
         return health;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -31,16 +40,30 @@ public class Character {
         this.attack = attack;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
-    
-    public void takeDamage(int amount) {
-        this.health -= amount;
-        if (this.health < 0) {
-            this.health = 0;
-        }
-        System.out.println(name + " a subi " + amount + " dégâts. PV restants : " + health);
+    public void setType(Type type) {
+        this.type = type;
     }
 
+    public void setAttackStrategy(AttackStrategy strategy) {
+        this.attackStrategy = strategy;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    public void performAttack(Character target) {
+        if (attackStrategy != null) {
+            attackStrategy.attack(this, target);
+        }
+    }
+    
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        System.out.println(name + " a subi " + damage + " dégâts. PV restants : " + health);
+        if (this.isDead()) {
+            this.health = 0;
+            System.out.println(name + " est vaincu !");
+        }
+    }
 }

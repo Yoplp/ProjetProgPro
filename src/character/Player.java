@@ -1,5 +1,8 @@
 package character;
 
+import character.strategy.AttackMagique;
+import character.strategy.AttackPhysique;
+import character.strategy.AttackStrategy;
 import item.Inventory;
 import map.Direction;
 import map.Room;
@@ -10,7 +13,7 @@ public class Player extends Character {
     private Inventory inventory;
 
     public Player(String name, int attack, Room currentRoom) {
-        super(name, attack, PLAYER_MAX_HEALTH);
+        super(name, attack, PLAYER_MAX_HEALTH, Type.NORMAL);
         this.currentRoom = currentRoom;
         this.inventory = new Inventory();
     }
@@ -35,6 +38,26 @@ public class Player extends Character {
             return true;
         }
         System.out.println("Impossible de se déplacer vers " + direction);
+        return false;
+    }
+
+    @Override
+    public void performAttack(Character target) {
+        if (!selectAttackStrategy()) {
+            System.out.println("Vous n'avez pas d'arme pour attaquer !");
+            return;
+        }
+        super.performAttack(target);
+    }
+
+    private boolean selectAttackStrategy() {
+        if (inventory.getItem("Baguette magique") != null) {
+            setAttackStrategy(new AttackMagique());
+            return true;
+        } else if (inventory.getItem("Épée") != null) {
+            setAttackStrategy(new AttackPhysique());
+            return true;
+        }
         return false;
     }
 }

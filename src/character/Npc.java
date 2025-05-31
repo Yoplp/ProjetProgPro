@@ -9,7 +9,7 @@ public class Npc extends Character {
     private NpcState state;
 
     public Npc(String name, int attack, int health, String message) {
-        super(name, attack, health);
+        super(name, attack, health, Type.NORMAL);
         this.message = message;
     }
 
@@ -35,5 +35,9 @@ public class Npc extends Character {
 
     public void setState(NpcState state) {
         this.state = state;
+    }
+
+    public void interact(Player player) {
+        state.interact(this, player);
     }
 }

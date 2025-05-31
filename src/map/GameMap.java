@@ -2,6 +2,7 @@ package map;
 
 import character.Monster;
 import character.Npc;
+import character.Type;
 
 import java.util.*;
 
@@ -24,27 +25,27 @@ public class GameMap {
         bar.addCharacter(new Npc("Vieil homme", 10,10, "Il y a un secret derrière la porte..."));
 
         Room goblin = new Room("Goblin");
-        goblin.addCharacter(new Monster("Goblin", 3, 15, false,true));
+        goblin.addCharacter(new Monster("Goblin", 3, 15, Type.PHYSICAL));
         Room chestGoblin = new Room("Chambre du Goblin");
 
         Room ghost = new Room("Fantômes");
-        ghost.addCharacter(new Monster("Fantômes", 7, 5, true,false));
+        ghost.addCharacter(new Monster("Fantômes", 7, 5, Type.MAGIC));
         Room chestGhost = new Room("Tombe du Fantômes");
 
         Room pc = new Room("PC Bang");
         pc.addCharacter(new Npc("Prince Nigérien", 10, 10, "Salut à toi, jeune entrepreneur !"));
 
-        Room door = new Room("Door");
+        Room door = new Room("Porte");
 
         Room boss = new Room("Boss");
-        boss.addCharacter(new Monster("Boss final", 3, 20));
+        boss.addCharacter(new Monster("Boss final", 3, 20, Type.NORMAL));
 
-        Room hallway1 = new Room("Hallway 1");
-        Room hallway2 = new Room("Hallway 2");
-        Room hallway3 = new Room("Hallway 3");
-        Room hallway4 = new Room("Hallway 4");
-        Room hallway5 = new Room("Hallway 5");
-        Room hallway6 = new Room("Hallway 6");
+        Room hallway1 = new Room("Couloir 1");
+        Room hallway2 = new Room("Couloir 2");
+        Room hallway3 = new Room("Couloir 3");
+        Room hallway4 = new Room("Couloir 4");
+        Room hallway5 = new Room("Couloir 5");
+        Room hallway6 = new Room("Couloir 6");
 
         connectRooms(start, Direction.NORTH, hallway2);
         connectRooms(start, Direction.SOUTH, hallway1);
@@ -83,7 +84,7 @@ public class GameMap {
     
     private void connectRooms(Room room1, Direction dirFrom1To2, Room room2) {
         room1.addExit(dirFrom1To2, room2);
-        room2.addExit(dirFrom1To2.getOppositeDirection(), room1);
+        room2.addExit(dirFrom1To2.getOpposite(), room1);
     }
 
     public Room getStartRoom() {

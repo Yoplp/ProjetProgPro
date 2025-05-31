@@ -4,17 +4,17 @@ import map.GameMap;
 import character.Monster;
 import character.Player;
 
-public class GameState {
-    private static GameState instance;
+public class GameController {
+    private static GameController instance;
     private GameMap map;
     private Player player;
     private boolean isRunning;
 
-    private GameState() { 
+    private GameController() {
         this.map = new GameMap();
         this.player = new Player("Salvateur Stellaire dis SS", 10, map.getStartRoom());
         this.isRunning = true;
-        if (Player.isDead()) {
+        if (player.isDead()) {
         	System.out.println("Game Over");
         	this.isRunning=false;
         }
@@ -24,10 +24,10 @@ public class GameState {
         }
     }
 
-    public static GameState getInstance() {
+    public static GameController getInstance() {
         if (instance == null) {
 
-            instance = new GameState();
+            instance = new GameController();
         }
         return instance;
     }

@@ -7,17 +7,17 @@ public enum Direction {
         return switch (this) {
             case NORTH -> SOUTH;
             case SOUTH -> NORTH;
-            case EAST  -> WEST;
-            case WEST  -> EAST;
+            case EAST -> WEST;
+            case WEST -> EAST;
         };
     }
 
-    public Direction getOppositeDirection() {
+    public String getTrad() {
         return switch (this) {
-            case NORTH -> Direction.SOUTH;
-            case SOUTH -> Direction.NORTH;
-            case EAST -> Direction.WEST;
-            case WEST -> Direction.EAST;
+            case NORTH -> "Haut";
+            case SOUTH -> "Bas";
+            case EAST -> "Droite";
+            case WEST -> "Gauche";
         };
     }
 }

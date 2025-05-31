@@ -7,6 +7,6 @@ public class AggressiveState implements NpcState {
     @Override
     public void interact(Npc npc, Player player) {
         System.out.println(npc.getName() + " becomes aggressive!");
-        npc.attack(player); // ou déclencher un Combat system
+        npc.performAttack(player);
     }
 }

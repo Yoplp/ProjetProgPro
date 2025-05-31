@@ -1,9 +1,9 @@
 package character.strategy;
 
 
-import character.Monster;
+import character.Character;
 
 public interface AttackStrategy {
-    void attack(Monster cible);
+    void attack(Character attacker, Character target);
 }
 

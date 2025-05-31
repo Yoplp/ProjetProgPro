@@ -1,15 +1,10 @@
 package item;
 
-public abstract class Item {
+public class Item {
     private String name;
-    private TypeItem type;
+    private ItemType type;
 
-    public enum TypeItem {
-        CONSUMABLE,
-        EQUIPMENT
-    }
-
-    public Item(String name, TypeItem type) {
+    public Item(String name, ItemType type) {
         this.name = name;
         this.type = type;
     }
@@ -18,9 +13,7 @@ public abstract class Item {
         return name;
     }
 
-    public TypeItem getType() {
+    public ItemType getType() {
         return type;
     }
-
-    public abstract void utiliser();
 }

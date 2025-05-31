@@ -1,16 +1,18 @@
 package character.strategy;
 
+import character.Character;
 import character.Monster;
+import character.Type;
 
 public class AttackMagique implements AttackStrategy {
     @Override
-    public void attack( Monster monster) {
-        if (monster.isWeakToMagic()) {
-            int damage = 5;
-            System.out.println(monster.getName() + " est faible à la magie !");
-            monster.takeDamage(damage);
+    public void attack(Character attacker, Character target) {
+        System.out.println(attacker.getName() + " attaque " + target.getName());
+        if (target.getType() == Type.MAGIC) {
+            System.out.println(target.getName() + " est faible aux attaques magiques !");
+            target.takeDamage(attacker.getAttack() * 2);
         } else {
-            System.out.println("La magie n'affecte pas " + monster.getName() + " !");
+            target.takeDamage(attacker.getAttack());
         }
     }
 }

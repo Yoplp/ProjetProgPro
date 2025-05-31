@@ -3,9 +3,6 @@ package game;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import character.strategy.AttackStrategy;
-import character.strategy.AttackMagique;
-import character.strategy.AttackPhysique;
 import map.Room;
 import map.Direction;
 import character.*;
@@ -13,11 +10,11 @@ import character.Character;
 import item.Item;
 
 public class Game {
-    private GameState gameState;
+    private GameController gameState;
     private Scanner scanner;
 
     public Game() {
-        this.gameState = GameState.getInstance();
+        this.gameState = GameController.getInstance();
         this.scanner = new Scanner(System.in);
     }
 
@@ -115,7 +112,7 @@ public class Game {
         }
     }
 
-    private void proposerSorties(Scanner scanner, Room salle, GameState etat) {
+    private void proposerSorties(Scanner scanner, Room salle, GameController etat) {
         System.out.println("Sorties disponibles :");
         for (Direction dir : Direction.values()) {
             if (salle.getExit(dir) != null) {
@@ -147,25 +144,6 @@ public class Game {
         }
     }
     
-    public void attaquer(Monster cible) {
-        AttackStrategy strategie;
 
-        if (gameState.getPlayer().getInventory().getItem("Baguette magique") != null) {
-            strategie = new AttackMagique();
-        } else if (gameState.getPlayer().getInventory().getItem("Épée") != null) {
-            strategie = new AttackPhysique();
-        } else {
-            System.out.println("Vous n'avez pas d'arme pour attaquer !");
-            return;
-        }
-
-        strategie.attack(cible);
-
-        if (cible.getHealth() <= 0) {
-            System.out.println(cible.getName() + " est vaincu !");
-            Room salleActuelle = gameState.getPlayer().getCurrentRoom();
-            salleActuelle.removeCharacter(cible);
-        }
-    }
 
 }

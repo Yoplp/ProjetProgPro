@@ -1,17 +1,18 @@
 package character.strategy;
 
 
-import character.Monster;
+import character.Character;
+import character.Type;
 
 public class AttackPhysique implements AttackStrategy {
     @Override
-    public void attack( Monster monster) {
-        if (monster.isWeakToPhysical()) {
-            int damage = 5;
-            System.out.println(monster.getName() + " est faible aux attaques physiques !");
-            monster.takeDamage(damage);
+    public void attack(Character attacker, Character target) {
+        System.out.println(attacker.getName() + " attaque " + target.getName());
+        if (target.getType() == Type.PHYSICAL) {
+            System.out.println(target.getName() + " est faible aux attaques physiques !");
+            target.takeDamage(attacker.getAttack() * 2);
         } else {
-            System.out.println("L'attaque physique n'affecte pas " + monster.getName() + " !");
+            target.takeDamage(attacker.getAttack());
         }
     }
 }
