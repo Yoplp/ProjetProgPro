@@ -17,6 +17,10 @@ public class Inventory {
     public void removeItem(Item item) {
         items.remove(item);
     }
+    
+    public List<Item> getItems() {
+        return items;
+    }
 
     public void showInventory() {
         if (items.isEmpty()) {

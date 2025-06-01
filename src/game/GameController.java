@@ -1,6 +1,7 @@
 package game;
 
 import map.GameMap;
+import map.Room;
 import character.Monster;
 import character.Player;
 
@@ -9,7 +10,7 @@ public class GameController {
     private GameMap map;
     private Player player;
     private boolean isRunning;
-
+    
     private GameController() {
         this.map = new GameMap();
         this.player = new Player("Salvateur Stellaire dis SS", 10, map.getStartRoom());
@@ -18,9 +19,17 @@ public class GameController {
         	System.out.println("Game Over");
         	this.isRunning=false;
         }
-        if (Monster.getName().equalsIgnoreCase("Boss final").isDead){
-        	System.out.println("C'est Gagné");
-        	this.isRunning=false;
+        Room bossRoom = map.getRoom("Boss");
+        if (bossRoom != null) {
+            for (character.Character c : bossRoom.getCharacter()) {
+                if (c instanceof Monster) {
+                    Monster boss = (Monster) c;
+                    if (boss.getName().equalsIgnoreCase("Boss final") && boss.isDead()) {
+                        System.out.println("C'est Gagné");
+                        this.isRunning = false;
+                    }
+                }
+            }
         }
     }
 

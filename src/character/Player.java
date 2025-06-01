@@ -11,11 +11,31 @@ public class Player extends Character {
     public static final int PLAYER_MAX_HEALTH = 10;
     private Room currentRoom;
     private Inventory inventory;
+    private AttackStrategy attackStrategy;
+    private int gold;
+
 
     public Player(String name, int attack, Room currentRoom) {
         super(name, attack, PLAYER_MAX_HEALTH, Type.NORMAL);
         this.currentRoom = currentRoom;
         this.inventory = new Inventory();
+        this.gold = 5;
+    }
+    
+    public int getGold() {
+        return gold;
+    }
+    @Override
+    public void heal(int amount) {
+        this.health = Math.min(this.health + amount, PLAYER_MAX_HEALTH);
+    }
+    
+    public void healToFull() {
+        this.health = PLAYER_MAX_HEALTH;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 
     public Room getCurrentRoom() {
@@ -41,23 +61,16 @@ public class Player extends Character {
         return false;
     }
 
-    @Override
-    public void performAttack(Character target) {
-        if (!selectAttackStrategy()) {
-            System.out.println("Vous n'avez pas d'arme pour attaquer !");
-            return;
-        }
-        super.performAttack(target);
+    public void setAttackStrategy(AttackStrategy strategy) {
+        this.attackStrategy = strategy;
     }
 
-    private boolean selectAttackStrategy() {
-        if (inventory.getItem("Baguette magique") != null) {
-            setAttackStrategy(new AttackMagique());
-            return true;
-        } else if (inventory.getItem("Épée") != null) {
-            setAttackStrategy(new AttackPhysique());
-            return true;
+    public void attack(Character target) {
+        if (attackStrategy != null) {
+            attackStrategy.attack(this, target);
+        } else {
+            System.out.println("Aucune stratégie d'attaque définie !");
         }
-        return false;
     }
+
 }

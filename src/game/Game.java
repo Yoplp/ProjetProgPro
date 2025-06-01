@@ -7,7 +7,11 @@ import map.Room;
 import map.Direction;
 import character.*;
 import character.Character;
+import character.strategy.AttackMagique;
+import character.strategy.AttackPhysique;
+import item.Inventory;
 import item.Item;
+import item.ItemType;
 
 public class Game {
     private GameController gameState;
@@ -36,10 +40,22 @@ public class Game {
 
                     switch (input) {
                         case "attaquer":
-                            attaquer(monstre);
+                        	attack(monstre);
                             break;
                         case "utiliser objet":
-                            //iventaire
+                            Inventory inv = gameState.getPlayer().getInventory();
+                            inv.showInventory();
+                            System.out.println("Quel objet voulez-vous utiliser ?");
+                            String nomObjet = scanner.nextLine().trim();
+                            Item item = inv.getItem(nomObjet);
+                            if (item != null) {
+                                item.use(gameState.getPlayer());
+                                if (item.getType() == ItemType.CONSUMABLE) {
+                                    inv.removeItem(item);
+                                }
+                            } else {
+                                System.out.println("Objet introuvable dans l'inventaire.");
+                            }
                             break;
                         case "sortir":
                             proposerSorties(scanner, salleActuelle, gameState);
@@ -55,7 +71,6 @@ public class Game {
 
             if (actionFaite) continue;
 
-            // Gestion des objets
             if (!salleActuelle.getItem().isEmpty()) {
                 for (Item item : salleActuelle.getItem()) {
                     System.out.println("Un objet est ici : " + item.getName());
@@ -91,7 +106,7 @@ public class Game {
 
                     switch (input) {
                         case "action":
-                            //action du npc
+                        	pnj.interact(gameState.getPlayer());
                             break;
                         case "sortir":
                             proposerSorties(scanner, salleActuelle, gameState);
@@ -111,7 +126,7 @@ public class Game {
             proposerSorties(scanner, salleActuelle, gameState);
         }
     }
-
+    
     private void proposerSorties(Scanner scanner, Room salle, GameController etat) {
         System.out.println("Sorties disponibles :");
         for (Direction dir : Direction.values()) {
@@ -144,6 +159,54 @@ public class Game {
         }
     }
     
+    
+    private void attack(Monster monstre) {
+        Player player = gameState.getPlayer();
+
+        while (monstre.getHealth() > 0 && player.getHealth() > 0) {
+            System.out.println("\nChoisissez un type d'attaque : (physique / magique)");
+            String choix = scanner.nextLine().toLowerCase().trim();
+
+            switch (choix) {
+                case "physique":
+                    if (player.getInventory().getItem("Épée") != null) {
+                        player.setAttackStrategy(new AttackPhysique());
+                    } else {
+                        System.out.println("Vous n'avez pas d'épée !");
+                        continue;
+                    }
+                    break;
+
+                case "magique":
+                    if (player.getInventory().getItem("Baguette magique") != null) {
+                        player.setAttackStrategy(new AttackMagique());
+                    } else {
+                        System.out.println("Vous n'avez pas de baguette magique !");
+                        continue;
+                    }
+                    break;
+
+                default:
+                    System.out.println("Type d'attaque inconnu.");
+                    continue;
+            }
+
+            player.attack(monstre);
+
+            if (monstre.getHealth() <= 0) {
+                System.out.println(monstre.getName() + " est vaincu !");
+                player.getCurrentRoom().removeCharacter(monstre);
+                player.healToFull();
+                System.out.println("Vous êtes soigné, votre vie est restaurée !");
+                break;
+            }
+
+            System.out.println(monstre.getName() + " riposte !");
+            player.takeDamage(monstre.getAttack());
+            System.out.println("Vous avez maintenant " + player.getHealth() + " PV.");
+
+        }
+    }
 
 
 }

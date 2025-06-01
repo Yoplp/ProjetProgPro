@@ -51,6 +51,10 @@ public class Character {
     public boolean isDead() {
         return health <= 0;
     }
+    
+    public void heal(int amount) {
+        this.health += amount; 
+    }
 
     public void performAttack(Character target) {
         if (attackStrategy != null) {

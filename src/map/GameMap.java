@@ -3,6 +3,8 @@ package map;
 import character.Monster;
 import character.Npc;
 import character.Type;
+import item.Inventory;
+import item.ItemFactory;
 
 import java.util.*;
 
@@ -19,10 +21,19 @@ public class GameMap {
         Room start = new Room("Start");
 
         Room merchant = new Room("Marchand");
-        merchant.addCharacter(new Npc("Marchand", 10,10, "Tu veux acheter quelque chose ?"));
+        Npc marchand = new Npc("Marchand", 10, 10, "Tu veux acheter quelque chose ?");
+        Inventory invMarchand = new Inventory();
+        invMarchand.addItem(ItemFactory.createItem("épée"));
+        invMarchand.addItem(ItemFactory.createItem("baguette magique"));
+        marchand.setInventory(invMarchand);
+        merchant.addCharacter(marchand);
 
         Room bar = new Room("Bar");
-        bar.addCharacter(new Npc("Vieil homme", 10,10, "Il y a un secret derrière la porte..."));
+        Npc vieilHomme = new Npc("Vieil homme", 10, 10, "Tu veux ce vieux breuvage ?");
+        Inventory invVieilHomme = new Inventory();
+        invVieilHomme.addItem(ItemFactory.createItem("potion"));
+        vieilHomme.setInventory(invVieilHomme);
+        bar.addCharacter(vieilHomme);
 
         Room goblin = new Room("Goblin");
         goblin.addCharacter(new Monster("Goblin", 3, 15, Type.PHYSICAL));
@@ -33,7 +44,11 @@ public class GameMap {
         Room chestGhost = new Room("Tombe du Fantômes");
 
         Room pc = new Room("PC Bang");
-        pc.addCharacter(new Npc("Prince Nigérien", 10, 10, "Salut à toi, jeune entrepreneur !"));
+        Npc prince = new Npc("Prince Nigérien", 10, 10, "Donne-moi 5 pièces et je te rends riche !");
+        Inventory invPrince = new Inventory();
+        invPrince.addItem(ItemFactory.createItem("clé"));
+        prince.setInventory(invPrince);
+        pc.addCharacter(prince);
 
         Room door = new Room("Porte");
 
