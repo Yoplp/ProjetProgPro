@@ -1,5 +1,6 @@
 package character;
 
+import character.strategy.AttackPhysique;
 import character.strategy.AttackStrategy;
 
 public class Character {
@@ -13,6 +14,7 @@ public class Character {
         this.name = name;
         this.attack = attack;
         this.health = health;
+        this.attackStrategy = new AttackPhysique();
         this.type = type;
     }
 

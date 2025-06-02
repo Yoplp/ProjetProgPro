@@ -3,6 +3,7 @@ package character;
 import java.util.Scanner;
 
 import character.state.NpcState;
+import character.state.PassiveState;
 import item.Inventory;
 import item.Item;
 
@@ -14,6 +15,8 @@ public class Npc extends Character {
     public Npc(String name, int attack, int health, String message) {
         super(name, attack, health, Type.NORMAL);
         this.message = message;
+        this.inventory = new Inventory();
+        this.state = new PassiveState();
     }
 
     public String getMessage() {
@@ -45,7 +48,6 @@ public class Npc extends Character {
     }
     
     public void sellItemsTo(Player player) {
-    	
         if (inventory == null || inventory.getItems().isEmpty()) {
             System.out.println("Ce PNJ n'a rien à vendre.");
             return;

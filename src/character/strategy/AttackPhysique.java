@@ -8,7 +8,7 @@ public class AttackPhysique implements AttackStrategy {
 	@Override
 	public void attack(Character attacker, Character target) {
 	    System.out.println(attacker.getName() + " attaque " + target.getName() + " avec une attaque PHYSIQUE");
-	    if (target.getType() == Type.PHYSICAL) {
+	    if (target.getType() != Type.MAGIC) {
 	        System.out.println("C'est super efficace !");
 	        target.takeDamage(attacker.getAttack());
 	    } else {

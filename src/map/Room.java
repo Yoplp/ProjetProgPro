@@ -20,8 +20,15 @@ public class Room {
         this.item = new ArrayList<>();
         this.character = new ArrayList<>();
     }
+
     public void addExit(Direction direction, Room NearRoom) {
         exit.put(direction, NearRoom);
+    }
+
+    public void showExits() {
+        for (Direction direction : exit.keySet()) {
+            System.out.println("- " + direction);
+        }
     }
 
     public Room getExit(Direction direction) {
@@ -36,7 +43,7 @@ public class Room {
         this.character.remove(character);
     }
 
-    public List<Character> getCharacter() {
+    public List<Character> getCharacters() {
         return character;
     }
 
@@ -48,7 +55,7 @@ public class Room {
         this.item.remove(item);
     }
 
-    public List<Item> getItem() {
+    public List<Item> getItems() {
         return item;
     }
 

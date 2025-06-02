@@ -1,9 +1,9 @@
 package character;
 
-import character.strategy.AttackMagique;
-import character.strategy.AttackPhysique;
 import character.strategy.AttackStrategy;
 import item.Inventory;
+import item.Item;
+import item.ItemType;
 import map.Direction;
 import map.Room;
 
@@ -50,26 +50,31 @@ public class Player extends Character {
         return inventory;
     }
 
-    public boolean move(Direction direction) {
+    public boolean moveTo(Direction direction) {
         Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom != null) {
             currentRoom = nextRoom;
-            System.out.println("Vous vous déplacez vers " + direction);
+            System.out.println("Vous vous déplacez vers " + direction + "\n");
             return true;
         }
-        System.out.println("Impossible de se déplacer vers " + direction);
         return false;
+    }
+
+    public void pickUpItem(Item item) {
+        inventory.addItem(item);
+        System.out.println("Vous avez pris : " + item.getName());
     }
 
     public void setAttackStrategy(AttackStrategy strategy) {
         this.attackStrategy = strategy;
     }
 
-    public void attack(Character target) {
+    @Override
+    public void performAttack(Character target) {
         if (attackStrategy != null) {
             attackStrategy.attack(this, target);
         } else {
-            System.out.println("Aucune stratégie d'attaque définie !");
+            System.out.println("Aucune stratégie d'attaque définie !\n");
         }
     }
 

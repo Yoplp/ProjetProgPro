@@ -5,6 +5,4 @@ import character.Player;
 
 public interface NpcState {
     void interact(Npc npc, Player player);
-    
-    
 }

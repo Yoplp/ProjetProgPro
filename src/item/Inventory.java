@@ -24,9 +24,9 @@ public class Inventory {
 
     public void showInventory() {
         if (items.isEmpty()) {
-            System.out.println("Empty Inventory");
+            System.out.println("Inventaire vide\n");
         } else {
-            System.out.println("Inventory:");
+            System.out.println("Inventaire:");
             for (Item item : items) {
                 System.out.println(item);
             }
