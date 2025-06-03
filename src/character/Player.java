@@ -2,7 +2,6 @@ package character;
 
 import character.strategy.AttackStrategy;
 import item.Inventory;
-import item.Item;
 import map.Direction;
 import map.Room;
 
@@ -56,37 +55,32 @@ public class Player extends Character {
         return inventory;
     }
 
-
-
     public boolean moveTo(String input) {
-        String trimmedInput = input.trim().toUpperCase();
-        Direction direction = switch (trimmedInput) {
-            case "N", "NORD", "NORTH" -> Direction.NORTH;
-            case "S", "SUD", "SOUTH" -> Direction.SOUTH;
-            case "E", "EST", "EAST" -> Direction.EAST;
-            case "O", "W", "OUEST", "WEST" -> Direction.WEST;
-            default -> null;
-        };
-
+        Direction direction = Direction.parse(input);
         if (direction == null) {
             System.out.println("Direction invalide.\n");
             return false;
         }
 
         Room nextRoom = currentRoom.getExit(direction);
-        if (nextRoom != null) {
-            currentRoom = nextRoom;
-            System.out.println("Vous vous déplacez vers le" + direction.getTrad() + "\n");
-            return true;
+        if (nextRoom == null) {
+            System.out.println("Impossible d'aller dans cette direction.\n");
+            return false;
         }
 
-        System.out.println("Impossible d'aller dans cette direction.\n");
-        return false;
-    }
+        if (currentRoom.getName().equalsIgnoreCase("Porte") &&
+                nextRoom.getName().equalsIgnoreCase("Boss")) {
 
-    public void pickUpItem(Item item) {
-        inventory.addItem(item);
-        System.out.println("Vous avez pris : " + item.getName());
+            if (inventory.getItem("Clé") == null) {
+                System.out.println("La porte est verrouillée, vous avez besoin d'une clé pour entrer.\n");
+                return false;
+            }
+            System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
+        }
+
+        currentRoom = nextRoom;
+        System.out.println("Vous vous déplacez vers le " + direction.getTrad() + "\n");
+        return true;
     }
 
     public void setAttackStrategy(AttackStrategy strategy) {
@@ -107,5 +101,4 @@ public class Player extends Character {
             System.out.println("Aucune stratégie d'attaque définie !\n");
         }
     }
-
 }

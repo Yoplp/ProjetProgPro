@@ -121,13 +121,7 @@ public class GameFacade {
         currentRoom.showExits();
 
         String input = scanner.nextLine().toUpperCase().trim();
-        try {
-            if (!controller.getPlayer().moveTo(input)) {
-                System.out.println("Impossible d'aller dans cette direction.\n");
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Direction invalide.\n");
-        }
+        controller.getPlayer().moveTo(input);
     }
 
     private void useItem() {

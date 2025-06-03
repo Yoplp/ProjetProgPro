@@ -20,4 +20,14 @@ public enum Direction {
             case WEST -> "Ouest";
         };
     }
+
+    public static Direction parse(String input) {
+        return switch (input.trim().toUpperCase()) {
+            case "N", "NORD", "NORTH" -> NORTH;
+            case "S", "SUD", "SOUTH" -> SOUTH;
+            case "E", "EST", "EAST" -> EAST;
+            case "O", "W", "OUEST", "WEST" -> WEST;
+            default -> null;
+        };
+    }
 }
