@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import map.Room;
@@ -36,13 +37,12 @@ public class GameFacade {
             if (currentRoom.getName().equalsIgnoreCase("Porte")) {
                 if (controller.getPlayer().getInventory().getItem("Clé") == null) {
                     System.out.println("La porte est verrouillée. Vous avez besoin d'une clé pour entrer.\n");
-                    return;
                 } else {
                     System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
                 }
             }
 
-            for (Character character : currentRoom.getCharacters()) {
+            for (Character character : new ArrayList<>(currentRoom.getCharacters())) {
                 if (character instanceof Monster) {
                     handleMonster((Monster) character);
                     if (!controller.isRunning()) return;
@@ -172,7 +172,6 @@ public class GameFacade {
             player.performAttack(target);
 
             if (target.isDead()) {
-                System.out.println(target.getName() + " est vaincu !");
                 player.getCurrentRoom().removeCharacter(target);
                 player.healToFull();
                 System.out.println("Vous êtes soigné, votre vie est restaurée !");

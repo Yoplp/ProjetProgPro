@@ -1,8 +1,6 @@
 package game;
 
 import map.GameMap;
-import map.Room;
-import character.Monster;
 import character.Player;
 
 public class GameController {
