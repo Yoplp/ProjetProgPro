@@ -21,7 +21,7 @@ public class GameMap {
         Room start = new Room("Start");
 
         Room merchant = new Room("Marchand");
-        Npc marchand = new Npc("Marchand", 10, 10, "Tu veux acheter quelque chose ?");
+        Npc marchand = new Npc("Marchand", 9, 10, "Tu veux acheter quelque chose ?");
         Inventory invMarchand = new Inventory();
         invMarchand.addItem(ItemFactory.createItem("épée"));
         invMarchand.addItem(ItemFactory.createItem("baguette magique"));
@@ -29,7 +29,7 @@ public class GameMap {
         merchant.addCharacter(marchand);
 
         Room bar = new Room("Bar");
-        Npc vieilHomme = new Npc("Vieil homme", 10, 10, "Tu veux ce vieux breuvage ?");
+        Npc vieilHomme = new Npc("Vieil homme", 9, 10, "Tu veux ce vieux breuvage ?");
         Inventory invVieilHomme = new Inventory();
         invVieilHomme.addItem(ItemFactory.createItem("potion"));
         vieilHomme.setInventory(invVieilHomme);
@@ -42,7 +42,7 @@ public class GameMap {
         ghost.addCharacter(new Monster("Fantômes", 7, 5, Type.MAGIC));
 
         Room pc = new Room("PC Bang");
-        Npc prince = new Npc("Prince Nigérien", 10, 10, "Donne-moi 5 pièces et je te rends riche !");
+        Npc prince = new Npc("Prince Nigérien", 9, 10, "Donne-moi 5 pièces et je te rends riche !");
         Inventory invPrince = new Inventory();
         invPrince.addItem(ItemFactory.createItem("clé"));
         prince.setInventory(invPrince);
@@ -69,6 +69,7 @@ public class GameMap {
         connectRooms(hallway3, Direction.WEST, hallway4);
         connectRooms(hallway4, Direction.WEST, hallway5);
         connectRooms(hallway4, Direction.NORTH, door);
+        connectRooms(door, Direction.NORTH, boss);
         connectRooms(hallway5, Direction.WEST, hallway6);
         connectRooms(hallway5, Direction.SOUTH, ghost);
         connectRooms(hallway6, Direction.WEST, goblin);

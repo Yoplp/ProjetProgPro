@@ -3,12 +3,13 @@ package character;
 import character.strategy.AttackStrategy;
 import item.Inventory;
 import item.Item;
-import item.ItemType;
 import map.Direction;
 import map.Room;
 
 public class Player extends Character {
     public static final int PLAYER_MAX_HEALTH = 10;
+    public static final int DROPPED_GOLD = 10;
+    public static final int STARTING_GOLD = 5;
     private Room currentRoom;
     private Inventory inventory;
     private AttackStrategy attackStrategy;
@@ -19,12 +20,17 @@ public class Player extends Character {
         super(name, attack, PLAYER_MAX_HEALTH, Type.NORMAL);
         this.currentRoom = currentRoom;
         this.inventory = new Inventory();
-        this.gold = 5;
+        this.gold = STARTING_GOLD;
     }
     
     public int getGold() {
         return gold;
     }
+
+    public void addGold(int gold) {
+        this.gold += gold;
+    }
+
     @Override
     public void heal(int amount) {
         this.health = Math.min(this.health + amount, PLAYER_MAX_HEALTH);
@@ -73,6 +79,12 @@ public class Player extends Character {
     public void performAttack(Character target) {
         if (attackStrategy != null) {
             attackStrategy.attack(this, target);
+            if (target.isDead()) {
+                healToFull();
+                System.out.println("Vous êtes soigné, votre vie est restaurée !");
+                addGold(DROPPED_GOLD);
+                System.out.println("Vous êtes soigné, vous avez actuellement " + gold + " pièces d'or !");
+            }
         } else {
             System.out.println("Aucune stratégie d'attaque définie !\n");
         }

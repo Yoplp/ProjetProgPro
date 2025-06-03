@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import map.Room;
@@ -32,8 +33,7 @@ public class GameFacade {
         while (controller.isRunning()) {
             Room currentRoom = controller.getPlayer().getCurrentRoom();
             System.out.println("Vous êtes dans la salle : " + currentRoom.getName());
-
-            for (Character character : currentRoom.getCharacters()) {
+            for (Character character : new ArrayList<>(currentRoom.getCharacters())) {
                 if (character instanceof Monster) {
                     handleMonster((Monster) character);
                     if (!controller.isRunning()) return;
@@ -158,18 +158,16 @@ public class GameFacade {
             String input = scanner.nextLine().trim();
             switch (input) {
                 case "1" -> {
-                    if (player.getInventory().getItem("Épée") != null) {
-                        player.setAttackStrategy(new AttackPhysique());
-                    } else {
+                    if (player.getInventory().getItem("Épée") == null) {
                         System.out.println("Vous n'avez pas d'épée !");
                     }
+                    player.setAttackStrategy(new AttackPhysique());
                 }
                 case "2" -> {
-                    if (player.getInventory().getItem("Baguette magique") != null) {
-                        player.setAttackStrategy(new AttackMagique());
-                    } else {
+                    if (player.getInventory().getItem("Baguette magique") == null) {
                         System.out.println("Vous n'avez pas de baguette magique !");
                     }
+                    player.setAttackStrategy(new AttackMagique());
                 }
                 default -> {
                     System.out.println("Type d'attaque inconnu.");
@@ -180,7 +178,6 @@ public class GameFacade {
             player.performAttack(target);
 
             if (target.isDead()) {
-                System.out.println(target.getName() + " est vaincu !");
                 player.getCurrentRoom().removeCharacter(target);
                 player.healToFull();
                 System.out.println("Vous êtes soigné, votre vie est restaurée !");
