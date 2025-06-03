@@ -14,10 +14,10 @@ public enum Direction {
 
     public String getTrad() {
         return switch (this) {
-            case NORTH -> "Haut";
-            case SOUTH -> "Bas";
-            case EAST -> "Droite";
-            case WEST -> "Gauche";
+            case NORTH -> "Nord";
+            case SOUTH -> "Sud";
+            case EAST -> "Est";
+            case WEST -> "Ouest";
         };
     }
 }

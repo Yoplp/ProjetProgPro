@@ -27,7 +27,7 @@ public class Room {
 
     public void showExits() {
         for (Direction direction : exit.keySet()) {
-            System.out.println("- " + direction);
+            System.out.println("- " + direction.getTrad());
         }
     }
 

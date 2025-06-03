@@ -56,13 +56,31 @@ public class Player extends Character {
         return inventory;
     }
 
-    public boolean moveTo(Direction direction) {
+
+
+    public boolean moveTo(String input) {
+        String trimmedInput = input.trim().toUpperCase();
+        Direction direction = switch (trimmedInput) {
+            case "N", "NORD", "NORTH" -> Direction.NORTH;
+            case "S", "SUD", "SOUTH" -> Direction.SOUTH;
+            case "E", "EST", "EAST" -> Direction.EAST;
+            case "O", "W", "OUEST", "WEST" -> Direction.WEST;
+            default -> null;
+        };
+
+        if (direction == null) {
+            System.out.println("Direction invalide.\n");
+            return false;
+        }
+
         Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom != null) {
             currentRoom = nextRoom;
-            System.out.println("Vous vous déplacez vers " + direction + "\n");
+            System.out.println("Vous vous déplacez vers le" + direction.getTrad() + "\n");
             return true;
         }
+
+        System.out.println("Impossible d'aller dans cette direction.\n");
         return false;
     }
 

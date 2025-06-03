@@ -17,11 +17,11 @@ import item.ItemType;
 public class GameFacade {
     private GameController controller;
     private VictoryManager victoryManager;
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public GameFacade() {
-        scanner = new Scanner(System.in);
-        victoryManager = new VictoryManager();
+        this.scanner = new Scanner(System.in);
+        this.victoryManager = new VictoryManager();
     }
 
     public void run() {
@@ -33,19 +33,32 @@ public class GameFacade {
         while (controller.isRunning()) {
             Room currentRoom = controller.getPlayer().getCurrentRoom();
             System.out.println("Vous êtes dans la salle : " + currentRoom.getName());
+
+            checkLockedDoor(currentRoom);
+
             for (Character character : new ArrayList<>(currentRoom.getCharacters())) {
-                if (character instanceof Monster) {
-                    handleMonster((Monster) character);
-                    if (!controller.isRunning()) return;
-                } else if (character instanceof Npc) {
-                    handleNpc((Npc) character);
-                    if (!controller.isRunning()) return;
+                if (character instanceof Monster monster) {
+                    handleMonster(monster);
+                } else if (character instanceof Npc npc) {
+                    handleNpc(npc);
                 }
+
+                if (!controller.isRunning()) return;
             }
 
             victoryManager.checkGameState(controller);
             if (controller.isRunning()) {
                 handleMovement(currentRoom);
+            }
+        }
+    }
+
+    private void checkLockedDoor(Room currentRoom) {
+        if ("Porte".equalsIgnoreCase(currentRoom.getName())) {
+            if (controller.getPlayer().getInventory().getItem("Clé") == null) {
+                System.out.println("La porte est verrouillée. Vous avez besoin d'une clé pour entrer.\n");
+            } else {
+                System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
             }
         }
     }
@@ -56,19 +69,21 @@ public class GameFacade {
         while (interacting) {
             System.out.println("1. Attaquer / 2. Utiliser objet / 3. Fuir");
             String input = scanner.nextLine();
-            switch (input) {
-                case "1":
+            interacting = switch (input) {
+                case "1" -> {
                     combat(monster);
-                    break;
-                case "2":
+                    yield false;
+                }
+                case "2" -> {
                     useItem();
-                    break;
-                case "3":
-                    interacting = false;
-                    break;
-                default:
+                    yield true;
+                }
+                case "3" -> false;
+                default -> {
                     System.out.println("Commande invalide.");
-            }
+                    yield true;
+                }
+            };
         }
     }
 
@@ -78,24 +93,26 @@ public class GameFacade {
         while (interacting) {
             System.out.println("1. Interagir / 2. Attaquer / 3. Utiliser objet / 4. Sortir");
             String input = scanner.nextLine().trim();
-            switch (input) {
-                case "1":
-                	npc.getState().interact(npc, controller.getPlayer(), scanner);
-                    break;
-                case "2":
-                	combat(npc);
+            interacting = switch (input) {
+                case "1" -> {
+                    npc.getState().interact(npc, controller.getPlayer(), scanner);
+                    yield true;
+                }
+                case "2" -> {
+                    combat(npc);
                     npc.setState(new AggressiveState());
-                    interacting = false;
-                    break;
-                case "3":
+                    yield false;
+                }
+                case "3" -> {
                     useItem();
-                    break;
-                case "4":
-                    interacting = false;
-                    break;
-                default:
+                    yield true;
+                }
+                case "4" -> false;
+                default -> {
                     System.out.println("Commande invalide.");
-            }
+                    yield true;
+                }
+            };
         }
     }
 
@@ -104,31 +121,14 @@ public class GameFacade {
         currentRoom.showExits();
 
         String input = scanner.nextLine().toUpperCase().trim();
-
         try {
-            Direction dir = Direction.valueOf(input);
-            Room nextRoom = currentRoom.getExit(dir);
-
-            if (currentRoom.getName().equalsIgnoreCase("Porte") &&
-                nextRoom != null && nextRoom.getName().equalsIgnoreCase("Boss")) {
-
-                if (controller.getPlayer().getInventory().getItem("Clé") == null) {
-                    System.out.println("La porte est verrouillée, vous ne pouvez pas avancer vers le nord. Vous avez besoin d'une clé pour entrer.\n");
-                    return;
-                } else {
-                    System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
-                }
-            }
-
-            if (!controller.getPlayer().moveTo(dir)) {
+            if (!controller.getPlayer().moveTo(input)) {
                 System.out.println("Impossible d'aller dans cette direction.\n");
             }
-
         } catch (IllegalArgumentException e) {
             System.out.println("Direction invalide.\n");
         }
     }
-
 
     private void useItem() {
         Inventory inv = controller.getPlayer().getInventory();
@@ -151,46 +151,42 @@ public class GameFacade {
 
     private void combat(Character target) {
         Player player = controller.getPlayer();
-        boolean inCombat = true;
 
-        while (inCombat) {
+        while (!target.isDead() && !player.isDead()) {
             System.out.println("Choisissez un type d'attaque : (1. physique / 2. magique)");
             String input = scanner.nextLine().trim();
-            switch (input) {
+            boolean valid = switch (input) {
                 case "1" -> {
                     if (player.getInventory().getItem("Épée") == null) {
                         System.out.println("Vous n'avez pas d'épée !");
                     }
                     player.setAttackStrategy(new AttackPhysique());
+                    yield true;
                 }
                 case "2" -> {
                     if (player.getInventory().getItem("Baguette magique") == null) {
                         System.out.println("Vous n'avez pas de baguette magique !");
                     }
                     player.setAttackStrategy(new AttackMagique());
+                    yield true;
                 }
                 default -> {
                     System.out.println("Type d'attaque inconnu.");
-                    continue;
+                    yield false;
                 }
-            }
+            };
+            if (!valid) continue;
 
             player.performAttack(target);
 
             if (target.isDead()) {
                 player.getCurrentRoom().removeCharacter(target);
-                player.healToFull();
-                System.out.println("Vous êtes soigné, votre vie est restaurée !");
                 break;
             }
 
             System.out.println(target.getName() + " riposte !");
             player.takeDamage(target.getAttack());
             System.out.println("Vous avez maintenant " + player.getHealth() + " PV.\n");
-
-            if (target.isDead() || controller.getPlayer().isDead()) {
-                inCombat = false;
-            }
         }
     }
 }
