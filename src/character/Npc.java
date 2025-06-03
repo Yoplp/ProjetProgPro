@@ -44,10 +44,10 @@ public class Npc extends Character {
     }
 
     public void interact(Player player) {
-        state.interact(this, player);
+        state.interact(this, player, null);
     }
     
-    public void sellItemsTo(Player player) {
+    public void sellItemsTo(Player player, Scanner scanner) {
         if (inventory == null || inventory.getItems().isEmpty()) {
             System.out.println("Ce PNJ n'a rien à vendre.");
             return;
@@ -59,7 +59,6 @@ public class Npc extends Character {
         }
 
         System.out.println("Quel objet voulez-vous acheter ?");
-        Scanner scanner = new Scanner(System.in);
         String choix = scanner.nextLine().trim();
 
         Item item = inventory.getItem(choix);
@@ -75,4 +74,5 @@ public class Npc extends Character {
             System.out.println("Objet non trouvé.");
         }
     }
+
 }

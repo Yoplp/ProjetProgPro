@@ -6,6 +6,7 @@ import map.Room;
 import map.Direction;
 import character.*;
 import character.Character;
+import character.state.AggressiveState;
 import character.strategy.AttackMagique;
 import character.strategy.AttackPhysique;
 import item.Inventory;
@@ -92,10 +93,11 @@ public class GameFacade {
             String input = scanner.nextLine().trim();
             switch (input) {
                 case "1":
-                    System.out.println(npc.getMessage());
+                	npc.getState().interact(npc, controller.getPlayer(), scanner);
                     break;
                 case "2":
-                    combat(npc);
+                	combat(npc);
+                    npc.setState(new AggressiveState());
                     interacting = false;
                     break;
                 case "3":
