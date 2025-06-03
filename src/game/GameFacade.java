@@ -52,10 +52,6 @@ public class GameFacade {
                 }
             }
 
-            if (!currentRoom.getItems().isEmpty()) {
-                handleItem(currentRoom);
-            }
-
             victoryManager.checkGameState(controller);
             if (controller.isRunning()) {
                 handleMovement(currentRoom);
@@ -109,25 +105,6 @@ public class GameFacade {
                 default:
                     System.out.println("Commande invalide.");
             }
-        }
-    }
-
-    private void handleItem(Room room) {
-        Item item = room.getItems().getFirst();
-
-        System.out.println("Il y a un objet : " + item.getName());
-
-        System.out.println("1. Prendre / 2. Sortir");
-        String input = scanner.nextLine().trim();
-        switch (input) {
-            case "1":
-                room.removeItem(item);
-                controller.getPlayer().pickUpItem(item);
-                break;
-            case "2":
-                break;
-            default:
-                System.out.println("Commande invalide.");
         }
     }
 

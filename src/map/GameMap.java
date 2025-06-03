@@ -37,11 +37,9 @@ public class GameMap {
 
         Room goblin = new Room("Goblin");
         goblin.addCharacter(new Monster("Goblin", 3, 15, Type.PHYSICAL));
-        Room chestGoblin = new Room("Chambre du Goblin");
 
         Room ghost = new Room("Fantômes");
         ghost.addCharacter(new Monster("Fantômes", 7, 5, Type.MAGIC));
-        Room chestGhost = new Room("Tombe du Fantômes");
 
         Room pc = new Room("PC Bang");
         Npc prince = new Npc("Prince Nigérien", 10, 10, "Donne-moi 5 pièces et je te rends riche !");
@@ -72,10 +70,8 @@ public class GameMap {
         connectRooms(hallway4, Direction.NORTH, door);
         connectRooms(hallway5, Direction.WEST, hallway6);
         connectRooms(hallway5, Direction.SOUTH, ghost);
-        connectRooms(ghost, Direction.SOUTH, chestGhost);
         connectRooms(hallway6, Direction.WEST, goblin);
         connectRooms(hallway6, Direction.NORTH, pc);
-        connectRooms(goblin, Direction.WEST, chestGoblin);
 
         rooms.put(bar.getName(), bar);
         rooms.put(start.getName(), start);
@@ -83,10 +79,8 @@ public class GameMap {
         rooms.put(door.getName(), door);
         rooms.put(boss.getName(), boss);
         rooms.put(ghost.getName(), ghost);
-        rooms.put(chestGhost.getName(), chestGhost);
         rooms.put(pc.getName(), pc);
         rooms.put(goblin.getName(), goblin);
-        rooms.put(chestGoblin.getName(), chestGoblin);
         rooms.put(hallway1.getName(), hallway1);
         rooms.put(hallway2.getName(), hallway2);
         rooms.put(hallway3.getName(), hallway3);
