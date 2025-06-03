@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import character.strategy.AttackStrategy;
 import map.Room;
 import map.Direction;
 import character.*;
@@ -34,31 +35,18 @@ public class GameFacade {
             Room currentRoom = controller.getPlayer().getCurrentRoom();
             System.out.println("Vous êtes dans la salle : " + currentRoom.getName());
 
-            checkLockedDoor(currentRoom);
-
             for (Character character : new ArrayList<>(currentRoom.getCharacters())) {
                 if (character instanceof Monster monster) {
                     handleMonster(monster);
                 } else if (character instanceof Npc npc) {
                     handleNpc(npc);
                 }
-
                 if (!controller.isRunning()) return;
             }
 
             victoryManager.checkGameState(controller);
             if (controller.isRunning()) {
                 handleMovement(currentRoom);
-            }
-        }
-    }
-
-    private void checkLockedDoor(Room currentRoom) {
-        if ("Porte".equalsIgnoreCase(currentRoom.getName())) {
-            if (controller.getPlayer().getInventory().getItem("Clé") == null) {
-                System.out.println("La porte est verrouillée. Vous avez besoin d'une clé pour entrer.\n");
-            } else {
-                System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
             }
         }
     }
@@ -96,11 +84,15 @@ public class GameFacade {
             interacting = switch (input) {
                 case "1" -> {
                     npc.getState().interact(npc, controller.getPlayer(), scanner);
-                    yield true;
+                    yield victoryManager.checkGameState(controller);
                 }
                 case "2" -> {
                     combat(npc);
-                    npc.setState(new AggressiveState());
+                    if (!npc.isDead()) {
+                        System.out.println("Vous avez pris la fuite !");
+                        System.out.println(npc.getName() + " est maintenant agressif !");
+                        npc.setState(new AggressiveState());
+                    }
                     yield false;
                 }
                 case "3" -> {
@@ -146,41 +138,70 @@ public class GameFacade {
     private void combat(Character target) {
         Player player = controller.getPlayer();
 
-        while (!target.isDead() && !player.isDead()) {
-            System.out.println("Choisissez un type d'attaque : (1. physique / 2. magique)");
-            String input = scanner.nextLine().trim();
-            boolean valid = switch (input) {
-                case "1" -> {
-                    if (player.getInventory().getItem("Épée") == null) {
-                        System.out.println("Vous n'avez pas d'épée !");
-                    }
-                    player.setAttackStrategy(new AttackPhysique());
-                    yield true;
-                }
-                case "2" -> {
-                    if (player.getInventory().getItem("Baguette magique") == null) {
-                        System.out.println("Vous n'avez pas de baguette magique !");
-                    }
-                    player.setAttackStrategy(new AttackMagique());
-                    yield true;
-                }
-                default -> {
-                    System.out.println("Type d'attaque inconnu.");
-                    yield false;
-                }
-            };
-            if (!valid) continue;
+        if (!hasAnyWeapon(player)) {
+            System.out.println("Vous n'avez pas d'armes pour attaquer !");
+            player.performAttack(target);
+            enemyCounterAttack(player, target);
+            return;
+        }
 
+        while (!target.isDead() && !player.isDead()) {
+            AttackStrategy strategy = selectAttackStrategy(player);
+            if (strategy == null) continue;
+
+            player.setAttackStrategy(strategy);
             player.performAttack(target);
 
             if (target.isDead()) {
                 player.getCurrentRoom().removeCharacter(target);
-                break;
+                victoryManager.checkGameState(controller);
+                return;
             }
 
-            System.out.println(target.getName() + " riposte !");
-            player.takeDamage(target.getAttack());
-            System.out.println("Vous avez maintenant " + player.getHealth() + " PV.\n");
+            enemyCounterAttack(player, target);
         }
+    }
+
+    private boolean hasAnyWeapon(Player player) {
+        return player.getInventory().getItem("Épée") != null ||
+                player.getInventory().getItem("Baguette magique") != null;
+    }
+
+    private AttackStrategy selectAttackStrategy(Player player) {
+        boolean hasSword = player.getInventory().getItem("Épée") != null;
+        boolean hasWand = player.getInventory().getItem("Baguette magique") != null;
+
+        System.out.println("Choisissez un type d'attaque :");
+        if (hasSword) System.out.println("1. Physique");
+        if (hasWand) System.out.println("2. Magique");
+
+        String input = scanner.nextLine().trim();
+
+        return switch (input) {
+            case "1" -> {
+                if (!hasSword) {
+                    System.out.println("Vous n'avez pas d'épée !");
+                    yield null;
+                }
+                yield new AttackPhysique();
+            }
+            case "2" -> {
+                if (!hasWand) {
+                    System.out.println("Vous n'avez pas de baguette magique !");
+                    yield null;
+                }
+                yield new AttackMagique();
+            }
+            default -> {
+                System.out.println("Type d'attaque inconnu.");
+                yield null;
+            }
+        };
+    }
+
+    private void enemyCounterAttack(Player player, Character target) {
+        System.out.println(target.getName() + " riposte !");
+        player.takeDamage(target.getAttack());
+        System.out.println("Vous avez maintenant " + player.getHealth() + " PV.\n");
     }
 }

@@ -11,6 +11,7 @@ import java.util.*;
 public class GameMap {
     private Map<String, Room> rooms;
     private Room startRoom;
+    private Room bossRoom;
 
     public GameMap() {
         rooms = new HashMap<>();
@@ -19,6 +20,9 @@ public class GameMap {
 
     private void initMap() {
         Room start = new Room("Start");
+
+        Room boss = new Room("Boss");
+        boss.addCharacter(new Monster("Boss final", 3, 20, Type.NORMAL));
 
         Room merchant = new Room("Marchand");
         Npc marchand = new Npc("Marchand", 9, 10, "Tu veux acheter quelque chose ?");
@@ -49,9 +53,6 @@ public class GameMap {
         pc.addCharacter(prince);
 
         Room door = new Room("Porte");
-
-        Room boss = new Room("Boss");
-        boss.addCharacter(new Monster("Boss final", 3, 20, Type.NORMAL));
 
         Room hallway1 = new Room("Couloir 1");
         Room hallway2 = new Room("Couloir 2");
@@ -90,6 +91,7 @@ public class GameMap {
         rooms.put(hallway5.getName(), hallway5);
         rooms.put(hallway6.getName(), hallway6);
 
+        this.bossRoom = boss;
         this.startRoom = start;
     }
     
@@ -100,6 +102,10 @@ public class GameMap {
 
     public Room getStartRoom() {
         return startRoom;
+    }
+
+    public Room getBossRoom() {
+        return bossRoom;
     }
 
     public Room getRoom(String name) {
