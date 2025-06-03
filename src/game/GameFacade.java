@@ -33,7 +33,7 @@ public class GameFacade {
             Room currentRoom = controller.getPlayer().getCurrentRoom();
             System.out.println("Vous êtes dans la salle : " + currentRoom.getName());
 
-            if (currentRoom.getName().equalsIgnoreCase("Door")) {
+            if (currentRoom.getName().equalsIgnoreCase("Porte")) {
                 if (controller.getPlayer().getInventory().getItem("Clé") == null) {
                     System.out.println("La porte est verrouillée. Vous avez besoin d'une clé pour entrer.\n");
                     return;

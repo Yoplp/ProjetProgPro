@@ -19,6 +19,11 @@ public class Item {
         return type;
     }
     
+    @Override
+    public String toString() {
+        return name + " (" + type + ")";
+    }
+    
     public void use(Player player) {
         if (this.name.equalsIgnoreCase("Potion") && this.type == ItemType.CONSUMABLE) {
             player.heal(5); 
