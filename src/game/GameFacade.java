@@ -150,18 +150,16 @@ public class GameFacade {
             String input = scanner.nextLine().trim();
             switch (input) {
                 case "1" -> {
-                    if (player.getInventory().getItem("Épée") != null) {
-                        player.setAttackStrategy(new AttackPhysique());
-                    } else {
+                    if (player.getInventory().getItem("Épée") == null) {
                         System.out.println("Vous n'avez pas d'épée !");
                     }
+                    player.setAttackStrategy(new AttackPhysique());
                 }
                 case "2" -> {
-                    if (player.getInventory().getItem("Baguette magique") != null) {
-                        player.setAttackStrategy(new AttackMagique());
-                    } else {
+                    if (player.getInventory().getItem("Baguette magique") == null) {
                         System.out.println("Vous n'avez pas de baguette magique !");
                     }
+                    player.setAttackStrategy(new AttackMagique());
                 }
                 default -> {
                     System.out.println("Type d'attaque inconnu.");

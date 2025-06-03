@@ -81,7 +81,9 @@ public class Player extends Character {
             attackStrategy.attack(this, target);
             if (target.isDead()) {
                 healToFull();
+                System.out.println("Vous êtes soigné, votre vie est restaurée !");
                 addGold(DROPPED_GOLD);
+                System.out.println("Vous êtes soigné, vous avez actuellement " + gold + " pièces d'or !");
             }
         } else {
             System.out.println("Aucune stratégie d'attaque définie !\n");
