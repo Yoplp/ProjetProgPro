@@ -33,15 +33,6 @@ public class GameFacade {
             Room currentRoom = controller.getPlayer().getCurrentRoom();
             System.out.println("Vous êtes dans la salle : " + currentRoom.getName());
 
-            if (currentRoom.getName().equalsIgnoreCase("Porte")) {
-                if (controller.getPlayer().getInventory().getItem("Clé") == null) {
-                    System.out.println("La porte est verrouillée. Vous avez besoin d'une clé pour entrer.\n");
-                    return;
-                } else {
-                    System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
-                }
-            }
-
             for (Character character : currentRoom.getCharacters()) {
                 if (character instanceof Monster) {
                     handleMonster((Monster) character);
@@ -113,14 +104,31 @@ public class GameFacade {
         currentRoom.showExits();
 
         String input = scanner.nextLine().toUpperCase().trim();
+
         try {
-            if (!controller.getPlayer().moveTo(Direction.valueOf(input))) {
+            Direction dir = Direction.valueOf(input);
+            Room nextRoom = currentRoom.getExit(dir);
+
+            if (currentRoom.getName().equalsIgnoreCase("Porte") &&
+                nextRoom != null && nextRoom.getName().equalsIgnoreCase("Boss")) {
+
+                if (controller.getPlayer().getInventory().getItem("Clé") == null) {
+                    System.out.println("La porte est verrouillée, vous ne pouvez pas avancer vers le nord. Vous avez besoin d'une clé pour entrer.\n");
+                    return;
+                } else {
+                    System.out.println("Vous utilisez la clé pour ouvrir la porte.\n");
+                }
+            }
+
+            if (!controller.getPlayer().moveTo(dir)) {
                 System.out.println("Impossible d'aller dans cette direction.\n");
             }
+
         } catch (IllegalArgumentException e) {
             System.out.println("Direction invalide.\n");
         }
     }
+
 
     private void useItem() {
         Inventory inv = controller.getPlayer().getInventory();

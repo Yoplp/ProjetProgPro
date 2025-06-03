@@ -59,7 +59,8 @@ public class GameMap {
         Room hallway4 = new Room("Couloir 4");
         Room hallway5 = new Room("Couloir 5");
         Room hallway6 = new Room("Couloir 6");
-
+        
+        connectRooms(door, Direction.NORTH, boss);
         connectRooms(start, Direction.NORTH, hallway2);
         connectRooms(start, Direction.SOUTH, hallway1);
         connectRooms(bar, Direction.WEST, hallway2);
