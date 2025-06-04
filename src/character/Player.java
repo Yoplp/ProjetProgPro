@@ -4,8 +4,13 @@ import character.strategy.AttackStrategy;
 import item.Inventory;
 import map.Direction;
 import map.Room;
+import observer.Observer;
+import observer.Subject;
 
-public class Player extends Character {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Player extends Character implements Subject {
     public static final int PLAYER_MAX_HEALTH = 10;
     public static final int DROPPED_GOLD = 10;
     public static final int STARTING_GOLD = 5;
@@ -13,6 +18,7 @@ public class Player extends Character {
     private Inventory inventory;
     private AttackStrategy attackStrategy;
     private int gold;
+    private List<Observer> observers = new ArrayList<>();
 
 
     public Player(String name, int attack, Room currentRoom) {
@@ -33,10 +39,12 @@ public class Player extends Character {
     @Override
     public void heal(int amount) {
         this.health = Math.min(this.health + amount, PLAYER_MAX_HEALTH);
+        notifyObservers("healthChanged", this.health);
     }
     
     public void healToFull() {
         this.health = PLAYER_MAX_HEALTH;
+        notifyObservers("healthChanged", this.health);
     }
 
     public void setGold(int gold) {
@@ -99,6 +107,34 @@ public class Player extends Character {
             }
         } else {
             System.out.println("Aucune stratégie d'attaque définie !\n");
+        }
+    }
+
+    @Override
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        System.out.println(name + " a subi " + damage + " dégâts.");
+        notifyObservers("healthChanged", this.health);
+        if (this.isDead()) {
+            this.health = 0;
+            System.out.println(name + " est vaincu !");
+        }
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String event, Object data) {
+        for (Observer obs : observers) {
+            obs.update(event, data);
         }
     }
 }

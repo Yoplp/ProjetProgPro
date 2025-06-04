@@ -3,6 +3,7 @@ package item;
 import character.Player;
 
 public class Item {
+    public static final int POTION_HEAL = 5;
     private String name;
     private ItemType type;
 
@@ -26,8 +27,8 @@ public class Item {
     
     public void use(Player player) {
         if (this.name.equalsIgnoreCase("Potion") && this.type == ItemType.CONSUMABLE) {
-            player.heal(5); 
-            System.out.println("Vous utilisez une potion et récupérez 20 PV !");
+            System.out.println("Vous utilisez une potion et récupérez "+ POTION_HEAL +" PV !");
+            player.heal(POTION_HEAL);
         } else {
             System.out.println("Cet objet ne peut pas être utilisé maintenant.");
         }
